@@ -86,38 +86,13 @@ class User:
             )
 
         quoted_username = quote(self.username)
-        r = requests.get(
-            "https://tiktok.com/@{}?lang=en".format(quoted_username),
-            headers={
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-                "path": "/@{}".format(quoted_username),
-                "Accept-Encoding": "gzip, deflate",
-                "Connection": "keep-alive",
-                "User-Agent": self.parent._user_agent,
-            },
-            proxies=User.parent._format_proxy(kwargs.get("proxy", None)),
-            cookies=User.parent._get_cookies(**kwargs),
-            **User.parent._requests_extra_kwargs,
-        )
 
-        data = extract_tag_contents(r.text)
-        user = json.loads(data)
-
-        user_props = user["props"]["pageProps"]
-        if user_props["statusCode"] == 404:
-            raise NotFoundException(
-                "TikTok user with username {} does not exist".format(self.username)
-            )
-
-        return user_props["userInfo"]
-
-        """
-        TODO: There is a route for user info, but uses msToken :\
+        # There is a route for user info, but uses msToken :\
         processed = self.parent._process_kwargs(kwargs)
         kwargs["custom_device_id"] = processed.device_id
 
         query = {
-            "uniqueId": "therock",
+            "uniqueId": quoted_username,
             "secUid": "",
             "msToken": User.parent._get_cookies()["msToken"]
         }
@@ -127,9 +102,8 @@ class User:
         )
 
         res = User.parent.get_data(path, subdomain="m", **kwargs)
-        print(res)
 
-        return res["userInfo"]"""
+        return res["userInfo"]
 
     def videos(self, count=30, cursor=0, **kwargs) -> Iterator[Video]:
         """
@@ -167,6 +141,7 @@ class User:
                 "region": processed.region,
                 "priority_region": processed.region,
                 "language": processed.language,
+                "msToken": User.parent._get_cookies()["msToken"]
             }
             path = "api/post/item_list/?{}&{}".format(
                 User.parent._add_url_params(), urlencode(query)
@@ -225,6 +200,7 @@ class User:
                 "region": processed.region,
                 "priority_region": processed.region,
                 "language": processed.language,
+                "msToken": User.parent._get_cookies()["msToken"]
             }
             path = "api/favorite/item_list/?{}&{}".format(
                 User.parent._add_url_params(), urlencode(query)

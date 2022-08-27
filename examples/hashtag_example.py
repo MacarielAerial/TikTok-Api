@@ -1,6 +1,13 @@
+import os
+from dotenv import load_dotenv
 from TikTokApi import TikTokApi
 
-with TikTokApi() as api:
+
+# Load authentication token
+load_dotenv()
+msToken: str = os.environ.get("msToken")
+
+with TikTokApi(msToken=msToken) as api:
     tag = api.hashtag(name="funny")
 
     print(tag.info())

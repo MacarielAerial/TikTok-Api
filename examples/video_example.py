@@ -1,7 +1,14 @@
+import os
+from dotenv import load_dotenv
 from TikTokApi import TikTokApi
 
-with TikTokApi() as api:
-    video = api.video(id="7041997751718137094")
+
+# Load authentication token
+load_dotenv()
+msToken: str = os.environ.get("msToken")
+
+with TikTokApi(msToken=msToken) as api: 
+    video = api.video(id="7079467984154234158")
 
     # Bytes of the TikTok video
     video_data = video.bytes()

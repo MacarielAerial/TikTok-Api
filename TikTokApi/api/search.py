@@ -90,6 +90,7 @@ class Search:
                 "keyword": search_term,
                 "cursor": cursor,
                 "app_language": Search.parent._language,
+                "msToken": User.parent._get_cookies()["msToken"]
             }
             path = "api/search/{}/full/?{}&{}".format(
                 obj_type, Search.parent._add_url_params(), urlencode(query)
