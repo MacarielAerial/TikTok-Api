@@ -5,6 +5,9 @@ description = "The Unofficial TikTok API Wrapper in Python 3."
 authors = ["David Teather <contact.davidteather@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+    {include = "TikTokApi"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
