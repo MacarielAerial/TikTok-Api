@@ -417,7 +417,6 @@ class TikTokApi:
         r = requests.get(
             full_url,
             headers=headers,
-            cookies=self._get_cookies(**kwargs),
             proxies=self._format_proxy(processed.proxy),
             **self._requests_extra_kwargs,
         )

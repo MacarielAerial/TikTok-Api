@@ -107,7 +107,6 @@ class Hashtag:
                 "count": page_size,
                 "challengeID": self.id,
                 "cursor": cursor,
-                "msToken": Hashtag.parent._get_cookies()["msToken"]
             }
             path = "api/challenge/item_list/?{}".format(urlencode(query))
             res = self.parent.get_data_no_sig(path, subdomain="us", **kwargs)
