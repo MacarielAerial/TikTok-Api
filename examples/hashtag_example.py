@@ -10,7 +10,7 @@ msToken: str = os.environ.get("msToken")
 with TikTokApi(msToken=msToken) as api:
     tag = api.hashtag(name="funny")
 
-    print(tag.info())
+    print(tag.info_full())
 
     for video in tag.videos():
         print(video.id)

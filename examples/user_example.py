@@ -10,6 +10,8 @@ msToken: str = os.environ.get("msToken")
 with TikTokApi(msToken=msToken) as api: 
     user = api.user(username="therock")
 
+    print(user.info_full())
+
     for video in user.videos():
         print(video.id)
 

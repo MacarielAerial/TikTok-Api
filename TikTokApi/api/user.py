@@ -87,7 +87,7 @@ class User:
 
         quoted_username = quote(self.username)
 
-        # There is a route for user info, but uses msToken :\
+        # There is a route for user info, but uses msToken
         processed = self.parent._process_kwargs(kwargs)
         kwargs["custom_device_id"] = processed.device_id
 

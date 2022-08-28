@@ -10,6 +10,8 @@ msToken: str = os.environ.get("msToken")
 with TikTokApi(msToken=msToken) as api: 
     video = api.video(id="7079467984154234158")
 
+    print(video.info_full())
+
     # Bytes of the TikTok video
     video_data = video.bytes()
 
