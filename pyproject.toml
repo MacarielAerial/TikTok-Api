@@ -16,6 +16,7 @@ playwright = "^1.25.2"
 selenium-stealth = "^1.0.6"
 selenium = "^4.4.3"
 python-dotenv = "^0.20.0"
+beautifulsoup4 = "^4.11.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.3.0"

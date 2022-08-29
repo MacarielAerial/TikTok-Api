@@ -304,7 +304,7 @@ class TikTokApi:
 
         query = {"verifyFp": verify_fp, "device_id": device_id, "_signature": signature, "msToken": msToken}
         url = "{}&{}".format(full_url, urlencode(query))
-
+        
         h = requests.head(
             url,
             headers={"x-secsdk-csrf-version": "1.2.5", "x-secsdk-csrf-request": "1"},
@@ -338,6 +338,7 @@ class TikTokApi:
         }
 
         self.logger.debug(f"GET: %s\n\theaders: %s", url, headers)
+        
         r = requests.get(
             url,
             headers=headers,
