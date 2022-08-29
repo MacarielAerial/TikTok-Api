@@ -107,9 +107,12 @@ class Hashtag:
                 "count": page_size,
                 "challengeID": self.id,
                 "cursor": cursor,
+                "msToken": Hashtag.parent._get_cookies()["msToken"]
             }
-            path = "api/challenge/item_list/?{}".format(urlencode(query))
-            res = self.parent.get_data_no_sig(path, subdomain="us", **kwargs)
+            path = "api/challenge/item_list/?{}&{}".format(self.parent._add_url_params(), urlencode(query))
+
+            res = self.parent.get_data(path, send_tt_params=True, **kwargs)
+            
             for result in res.get("itemList", []):
                 yield self.parent.video(data=result)
             if not res.get("hasMore", False):
