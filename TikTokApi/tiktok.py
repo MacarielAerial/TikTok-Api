@@ -379,7 +379,8 @@ class TikTokApi:
                 raise NotAvailableException(10219, r, "Content not available for this region")
             elif statusCode != 0 and statusCode != -1:
                 raise TikTokException(statusCode, r,
-                                      ERROR_CODES.get(statusCode, f"TikTok sent an unknown StatusCode of {statusCode}")
+                                      ERROR_CODES.get(statusCode, f"TikTok sent an unknown StatusCode of {statusCode} "
+                                                      f"with the following text:\n{r.text}")
                                       )
 
             return r.json()
