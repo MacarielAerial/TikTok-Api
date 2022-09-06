@@ -68,7 +68,7 @@ class User:
         """
         return self.info_full(**kwargs)["user"]
 
-    def info_full(self, **kwargs) -> dict:
+    def info_full(self, use_html: bool = False, **kwargs) -> dict:
         """
         Returns a dictionary of information associated with this User.
         Includes statistics about this user.
@@ -87,23 +87,45 @@ class User:
 
         quoted_username = quote(self.username)
 
-        # There is a route for user info, but uses msToken
-        processed = self.parent._process_kwargs(kwargs)
-        kwargs["custom_device_id"] = processed.device_id
+        if not use_html:
+            # There is a route for user info, but uses msToken
+            processed = self.parent._process_kwargs(kwargs)
+            kwargs["custom_device_id"] = processed.device_id
 
-        query = {
-            "uniqueId": quoted_username,
-            "secUid": "",
-            "msToken": User.parent._get_cookies()["msToken"]
-        }
+            query = {
+                "uniqueId": quoted_username,
+                "secUid": "",
+                "msToken": User.parent._get_cookies()["msToken"]
+            }
 
-        path = "api/user/detail/?{}&{}".format(
-            User.parent._add_url_params(), urlencode(query)
-        )
+            path = "api/user/detail/?{}&{}".format(
+                User.parent._add_url_params(), urlencode(query)
+            )
 
-        res = User.parent.get_data(path, subdomain="m", **kwargs)
+            res = User.parent.get_data(path, subdomain="m", **kwargs)
 
-        return res["userInfo"]
+            return res["userInfo"]
+        
+        else:
+            r = requests.get(
+                "https://www.tiktok.com/@{}".format(quoted_username),
+                headers={
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                    "Accept-Encoding": "gzip, deflate",
+                    "Connection": "keep-alive",
+                    "User-Agent": self.parent._user_agent,
+                },
+                cookies=self.parent._get_cookies(**kwargs)
+            )
+            
+            data = extract_tag_contents(r.text)
+
+            user_info = data["MobileUserModule"]["users"][quoted_username]
+            user_stats = data["MobileUserModule"]["stats"][quoted_username]
+            
+            dict_info_full = {"users": user_info, "stats": user_stats}
+
+            return dict_info_full
 
     def videos(self, count=30, cursor=0, **kwargs) -> Iterator[Video]:
         """

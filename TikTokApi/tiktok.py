@@ -377,6 +377,9 @@ class TikTokApi:
             elif statusCode == 10219:
                 # Not available in this region
                 raise NotAvailableException(10219, r, "Content not available for this region")
+            elif statusCode == 10205:
+                # Hashtag not exist
+                raise HashtagNotExistException(10205, r, "Hashtag does not exist")
             elif statusCode != 0 and statusCode != -1:
                 raise TikTokException(statusCode, r,
                                       ERROR_CODES.get(statusCode, f"TikTok sent an unknown StatusCode of {statusCode} "
